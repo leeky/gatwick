@@ -8,27 +8,31 @@ feature "User manages their events" do
   end
 
   scenario "User creates a new event" do
-    visit new_event_path(as: create(:user))
+    visit events_path(as: create(:user))
+    click_on "Add Event"
 
     fill_in :event_name, with: "BarCamp"
-    click_button "Create Event"
+    click_on t('event.create')
 
     expect(page).to have_content "Event was created!"
   end
 
   scenario "User edits an existing event" do
     user = create(:user)
-    create(:event, name: "RubyConf", user: user)
+    event = create(:event, name: "RubyConf", user: user)
 
     visit events_path(as: user)
-
-    within find("tr", text: "RubyConf") do
-      click_link "Edit"
-    end
+    edit_event(event)
 
     fill_in :event_name, with: "RubyConf 2015"
-    click_button "Update Event"
+    click_on t('event.update')
 
     expect(page).to have_content "Event was updated!"
+  end
+
+  def edit_event(event)
+    within find("tr[data-id='#{event.id}']") do
+      click_link t('shared.edit')
+    end
   end
 end

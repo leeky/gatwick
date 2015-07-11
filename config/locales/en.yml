@@ -1,19 +1,19 @@
+---
 en:
   date:
     formats:
-      default:
-        "%m/%d/%Y"
-      with_weekday:
-        "%a %m/%d/%y"
-
+      default: "%m/%d/%Y"
+      with_weekday: "%a %m/%d/%y"
+  event:
+    create: Create Event
+    update: Update Event
+    add: Add Event
+  shared:
+    edit: Edit
   time:
     formats:
-      default:
-        "%a, %b %-d, %Y at %r"
-      date:
-        "%b %-d, %Y"
-      short:
-        "%B %d"
-
+      date: "%b %-d, %Y"
+      default: "%a, %b %-d, %Y at %r"
+      short: "%B %d"
   titles:
     application: Gatwick
