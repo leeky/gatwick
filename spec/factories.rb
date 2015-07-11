@@ -10,6 +10,10 @@ FactoryGirl.define do
   factory :user do
     email
     password "password"
+
+    trait :eventbrite_authenticated do
+      eventbrite_token "dummy"
+    end
   end
 
   factory :event do
