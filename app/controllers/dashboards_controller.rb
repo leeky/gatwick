@@ -5,6 +5,8 @@ class DashboardsController < ApplicationController
     unless current_user.eventbrite_token?
       @eventbrite_auth_url = eventbrite_auth_url
     end
+
+    @events = current_user.events.all
   end
 
   private

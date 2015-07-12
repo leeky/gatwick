@@ -14,6 +14,8 @@ class CallbacksController < ApplicationController
 
     current_user.update(eventbrite_token: token)
 
+    EventFetcherJob.perform_later(current_user)
+
     redirect_with_success
   end
 

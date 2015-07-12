@@ -15,6 +15,8 @@ describe CallbacksController do
         create_user_and_sign_in
         stub_eventbrite_token_exchange
 
+        expect(EventFetcherJob).to receive(:perform_later).once
+
         get :new, code: "dummy-token"
 
         expect(response).to redirect_to(root_path)
