@@ -3,6 +3,9 @@
 Gatwick gives you a nice UI to offer self-service check-in/check-out at events.
 It automatically synchronises attendee data via the Eventbrite API.
 
+[![Build
+Status](https://travis-ci.org/leeky/gatwick.svg?branch=master)](https://travis-ci.org/leeky/gatwick)
+
 ## Getting Started
 
 After you have cloned this repo, run this setup script to set up your machine
