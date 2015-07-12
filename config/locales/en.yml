@@ -1,9 +1,5 @@
 ---
 en:
-  callbacks:
-    new:
-      eventbrite_failure: Sorry, we could not connect your account to Eventbrite.
-      eventbrite_success: Your account has been successfully connected to Eventbrite.
   date:
     formats:
       default: "%m/%d/%Y"
@@ -12,6 +8,8 @@ en:
     add: Add Event
     create: Create Event
     update: Update Event
+  eventbrite_failure: Sorry, we could not connect your account to Eventbrite.
+  eventbrite_success: Your account has been successfully connected to Eventbrite.
   shared:
     edit: Edit
   time:

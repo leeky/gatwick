@@ -18,7 +18,7 @@ describe CallbacksController do
         get :new, code: "dummy-token"
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:notice]).to eq t("callbacks.new.eventbrite_success")
+        expect(flash[:notice]).to eq t("eventbrite_success")
         expect(@user.eventbrite_token).to eq "dummy-access-token"
       end
     end
@@ -31,7 +31,7 @@ describe CallbacksController do
         get :new
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq t("callbacks.new.eventbrite_failure")
+        expect(flash[:alert]).to eq t("eventbrite_failure")
       end
     end
 
@@ -43,7 +43,7 @@ describe CallbacksController do
         get :new, code: "broken-token"
 
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq t("callbacks.new.eventbrite_failure")
+        expect(flash[:alert]).to eq t("eventbrite_failure")
       end
     end
   end

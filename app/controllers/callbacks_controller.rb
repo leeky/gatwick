@@ -3,17 +3,18 @@ class CallbacksController < ApplicationController
 
   def new
     if params[:code].nil?
-      return redirect_to signed_in_root_path, alert: t(".eventbrite_failure")
+      return redirect_with_failure
     end
 
     token = exchange_token(params[:code])
 
-    if token
-      current_user.update(eventbrite_token: token)
-      redirect_to signed_in_root_path, notice: t(".eventbrite_success")
-    else
-      redirect_to signed_in_root_path, alert: t(".eventbrite_failure")
+    unless token
+      return redirect_with_failure
     end
+
+    current_user.update(eventbrite_token: token)
+
+    redirect_with_success
   end
 
   private
@@ -30,5 +31,13 @@ class CallbacksController < ApplicationController
     rescue OAuth2::Error
       false
     end
+  end
+
+  def redirect_with_success
+    redirect_to signed_in_root_path, notice: t("eventbrite_success")
+  end
+
+  def redirect_with_failure
+    redirect_to signed_in_root_path, alert: t("eventbrite_failure")
   end
 end
