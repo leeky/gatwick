@@ -18,6 +18,8 @@ feature "User manages their events" do
   scenario "and activates an event" do
     create_user_and_events
 
+    expect(AttendeeFetcherJob).to receive(:perform_later).once
+
     visit signed_in_root_path(as: @user)
 
     within "ul.events > li[data-id='#{@events.first.id}']" do
