@@ -22,7 +22,7 @@ describe EventFetcherJob do
   def stub_event_list
     dummy_events = {
       "pagination": {
-        "object_count": 18,
+        "object_count": 2,
         "page_number": 1,
         "page_size": 50,
         "page_count": 1

@@ -5,7 +5,7 @@ class EventFetcherJob < ActiveJob::Base
     return true if user.eventbrite_token.empty?
 
     Eventbrite.token = user.eventbrite_token
-    user_events = Eventbrite::User.owned_events({ user_id: 'me' })
+    user_events = Eventbrite::User.owned_events(user_id: "me")
 
     if user_events.events.size > 0
       user.events.delete_all

@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713111823) do
+ActiveRecord::Schema.define(version: 20150713125416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attendees", force: :cascade do |t|
+    t.string  "name"
+    t.string  "email"
+    t.string  "cell_phone"
+    t.string  "eventbrite_attendee_id", null: false
+    t.string  "eventbrite_barcode"
+    t.string  "eventbrite_status"
+    t.integer "event_id"
+  end
+
+  add_index "attendees", ["eventbrite_attendee_id"], name: "index_attendees_on_eventbrite_attendee_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
