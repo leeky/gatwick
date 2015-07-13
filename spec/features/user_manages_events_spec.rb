@@ -2,43 +2,50 @@ require "rails_helper"
 
 feature "User manages their events" do
   scenario "asks visitors to sign in first" do
-    visit events_path
+    visit signed_in_root_path
 
-    expect(current_path).to eq sign_in_path
+    expect(current_path).to eq root_path
+    expect(page).to have_content(t("layouts.application.sign_in"))
   end
 
   scenario "and sees a list of their events" do
-    visit events_path(as: create(:user, :eventbrite_authenticated))
+    create_user_and_events
+    visit signed_in_root_path(as: @user)
 
-    expect(page).to have_css("table.events")
+    expect(page).to have_css("ul.events > li", count: 3)
   end
 
-  # scenario "User creates a new event" do
-  #   visit events_path(as: create(:user))
-  #   click_on "Add Event"
+  scenario "and activates an event" do
+    create_user_and_events
 
-  #   fill_in :event_name, with: "BarCamp"
-  #   click_on t('event.create')
+    visit signed_in_root_path(as: @user)
 
-  #   expect(page).to have_content "Event was created!"
-  # end
+    within "ul.events > li[data-id='#{@events.first.id}']" do
+      click_on "Activate"
+    end
 
-  # scenario "User edits an existing event" do
-  #   user = create(:user)
-  #   event = create(:event, name: "RubyConf", user: user)
+    within "ul.events > li[data-id='#{@events.first.id}']" do
+      expect(page).to have_link("Deactivate")
+    end
+  end
 
-  #   visit events_path(as: user)
-  #   edit_event(event)
+  scenario "and deactivates an event" do
+    create_user_and_events
+    Event.first.update(active: true)
 
-  #   fill_in :event_name, with: "RubyConf 2015"
-  #   click_on t('event.update')
+    visit signed_in_root_path(as: @user)
 
-  #   expect(page).to have_content "Event was updated!"
-  # end
+    within "ul.events > li[data-id='#{@events.first.id}']" do
+      click_on "Deactivate"
+    end
 
-  # def edit_event(event)
-  #   within find("tr[data-id='#{event.id}']") do
-  #     click_link t('shared.edit')
-  #   end
-  # end
+    within "ul.events > li[data-id='#{@events.first.id}']" do
+      expect(page).to have_link("Activate")
+    end
+  end
+
+  def create_user_and_events
+    @user = create(:user, :eventbrite_authenticated)
+    @events = create_list(:event, 3, user: @user)
+  end
 end
