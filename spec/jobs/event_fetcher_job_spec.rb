@@ -15,7 +15,7 @@ describe EventFetcherJob do
       expect(user.events.first.description).to eql "event description"
       expect(user.events.first.event_url).
         to eql "http://www.eventbrite.com/e/event-name-1234"
-      expect(user.events.first.eventbrite_id).to eql 1234
+      expect(user.events.first.eventbrite_id).to eql "1234"
     end
   end
 
