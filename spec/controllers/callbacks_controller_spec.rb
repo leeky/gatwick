@@ -56,26 +56,14 @@ describe CallbacksController do
   end
 
   def stub_eventbrite_token_exchange
-    stub_request(:post, "https://www.eventbrite.com/oauth/token").
-      to_return(
-        status: 200,
-        body: {
-          "token_type": "bearer",
-          "access_token": "dummy-access-token"
-        }.to_json,
-        headers: { "Content-Type": "application/json" }
-      )
+    allow_any_instance_of(EventbriteAuthenticator).
+      to receive(:exchange_token).
+      and_return('dummy-access-token')
   end
 
   def stub_eventbrite_token_exchange_failure
-    stub_request(:post, "https://www.eventbrite.com/oauth/token").
-      to_return(
-        status: 400,
-        body: {
-          "error_description": "code is invalid or expired",
-          "error": "invalid_grant"
-        }.to_json,
-        headers: { "Content-Type": "application/json" }
-      )
+    allow_any_instance_of(EventbriteAuthenticator).
+      to receive(:exchange_token).
+      and_return(false)
   end
 end

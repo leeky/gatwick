@@ -12,12 +12,6 @@ class DashboardsController < ApplicationController
   private
 
   def eventbrite_auth_url
-    client ||= OAuth2::Client.new(
-      ENV.fetch("EVENTBRITE_OAUTH_ID"),
-      ENV.fetch("EVENTBRITE_OAUTH_SECRET"),
-      site: "https://www.eventbrite.com/oauth/authorize"
-    )
-
-    client.auth_code.authorize_url(redirect_uri: new_callback_url)
+    EventbriteAuthenticator.new.auth_url
   end
 end

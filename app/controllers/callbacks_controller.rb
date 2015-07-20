@@ -6,7 +6,7 @@ class CallbacksController < ApplicationController
       return redirect_with_failure
     end
 
-    token = exchange_token(params[:code])
+    token = EventbriteAuthenticator.new.exchange_token(params[:code])
 
     unless token
       return redirect_with_failure
@@ -20,20 +20,6 @@ class CallbacksController < ApplicationController
   end
 
   private
-
-  def exchange_token(token)
-    client = OAuth2::Client.new(
-      ENV.fetch("EVENTBRITE_OAUTH_ID"),
-      ENV.fetch("EVENTBRITE_OAUTH_SECRET"),
-      site: "https://www.eventbrite.com/oauth/authorize"
-    )
-
-    begin
-      client.auth_code.get_token(token, redirect_uri: new_callback_url).token
-    rescue OAuth2::Error
-      false
-    end
-  end
 
   def redirect_with_success
     redirect_to signed_in_root_path, notice: t("eventbrite_success")
