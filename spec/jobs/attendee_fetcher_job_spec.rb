@@ -15,6 +15,20 @@ describe AttendeeFetcherJob do
       expect(event.attendees.first.email).to eql "fred@example.com"
       expect(event.attendees.first.eventbrite_attendee_id).to eql "1"
     end
+
+    it "fetches attendee details despite missing fields" do
+      user = create(:user, :eventbrite_authenticated)
+      event = create(:event, user: user, eventbrite_id: "4321")
+
+      stub_broken_attendee_list
+
+      AttendeeFetcherJob.perform_now(event)
+
+      expect(event.attendees.size).to eql 1
+      expect(event.attendees.first.cell_phone).to eql ''
+      expect(event.attendees.first.email).to eql ''
+      expect(event.attendees.first.eventbrite_barcode).to eql ''
+    end
   end
 
   def stub_attendee_list
@@ -58,6 +72,33 @@ describe AttendeeFetcherJob do
     }.to_json
 
     stub_request(:get, "https://www.eventbriteapi.com/v3/events/1234/attendees").
+      to_return(
+        status: 200,
+        body: dummy_attendees,
+        headers: {}
+      )
+  end
+
+  def stub_broken_attendee_list
+    dummy_attendees = {
+      "pagination": {
+        "object_count": 1,
+        "page_number": 1,
+        "page_size": 50,
+        "page_count": 1
+      },
+      "attendees": [
+        {
+          "id": "42",
+          "status": "Attending",
+          "profile": {
+            "name": "Broken User",
+          }
+        }
+      ]
+    }.to_json
+
+    stub_request(:get, "https://www.eventbriteapi.com/v3/events/4321/attendees").
       to_return(
         status: 200,
         body: dummy_attendees,

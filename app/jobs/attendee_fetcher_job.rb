@@ -34,13 +34,22 @@ class AttendeeFetcherJob < ActiveJob::Base
   end
 
   def create_attendee(attendee)
+    cell_phone = attendee.profile.try(:cell_phone) || ""
+    email = attendee.profile.try(:email) || ""
+
+    if attendee.try(:barcodes) && attendee.barcodes.size > 0
+      barcode = attendee.barcodes.first.barcode
+    else
+      barcode = ""
+    end
+
     @event.attendees.create(
       name: attendee.profile.name,
-      email: attendee.profile.email,
-      cell_phone: attendee.profile.cell_phone,
+      email: email,
+      cell_phone: cell_phone,
       eventbrite_attendee_id: attendee.id,
       eventbrite_status: attendee.status,
-      eventbrite_barcode: attendee.barcodes.first.barcode
+      eventbrite_barcode: barcode
     )
   end
 end
