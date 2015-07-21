@@ -7,6 +7,14 @@ FactoryGirl.define do
     "Event ##{n}"
   end
 
+  sequence :name do |n|
+    "Name ##{n}"
+  end
+
+  sequence :eventbrite_barcode do |n|
+    sprintf("%010d", n)
+  end
+
   factory :user do
     email
     password "password"
@@ -19,5 +27,11 @@ FactoryGirl.define do
   factory :event do
     user
     name { generate(:event_name) }
+  end
+
+  factory :attendee do
+    event
+    name { generate(:name) }
+    eventbrite_barcode { generate(:barcode) }
   end
 end

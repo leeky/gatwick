@@ -9,6 +9,7 @@
     <li data-id="<%= event.id %>">
       <%= event.name %>
       <% if event.active? %>
+        <%= link_to "Enable Kiosk Mode", event_kiosk_path(event) %>
         <%= link_to "Deactivate", event_deactivation_path(event), method: :post %>
       <% else %>
         <%= link_to "Activate", event_activation_path(event), method: :post %>
